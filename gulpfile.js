@@ -12,27 +12,30 @@ const babel = require('gulp-babel');
 const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
 
+const srcPath = 'app';
+const destPath = 'dist';
+
 const paths = {
     html: {
-        src: ['app/pages/**/*.html'],
-        dest: 'dist/'
+        src: [`${srcPath}/pages/**/*.html`],
+        dest: destPath
     },
     images: {
-        src: ['app/images/*'],
-        dest: 'dist/images',
+        src: [`${srcPath}/images/*`],
+        dest: `${destPath}/images`,
     },
     styles: {
-        src: ['app/scss/**/*.scss'],
-        dest: 'dist/css',
+        src: [`${srcPath}/scss/**/*.scss`],
+        dest: `${destPath}/css`,
     },
     scripts: {
-        src: ['app/js/**/*.js'],
-        dest: 'dist/js',
+        src: [`${srcPath}/js/**/*.js`],
+        dest: `${destPath}/js`,
     },
 };
 
 function cleaning() {
-    return src('dist')
+    return src(destPath)
         .pipe(clean());
 }
 
@@ -40,10 +43,10 @@ function html() {
     panini.refresh();
     return src(paths.html.src)
         .pipe(panini({
-            root: 'app/pages',
-            layouts: 'app/layouts/',
-            partials: 'app/partials/',
-            data: 'app/data/'
+            root: `${srcPath}/pages`,
+            layouts: `${srcPath}/layouts/`,
+            partials: `${srcPath}/partials/`,
+            data: `${srcPath}/data/`
         }))
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(dest(paths.html.dest))
@@ -86,7 +89,7 @@ function serve() {
         port: 3000
     });
 
-    watch(paths.html.src, html);
+    watch([`${srcPath}/**/*.html`, `${srcPath}/data/*.json`], html);
     watch(paths.images.src, images);
     watch(paths.styles.src, styles);
     watch(paths.scripts.src, scripts);

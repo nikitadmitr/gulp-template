@@ -1,6 +1,5 @@
 const { src, dest, series, parallel, watch } = require('gulp');
 const clean = require('gulp-clean');
-const panini = require("panini");
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
 const concat = require('gulp-concat');
@@ -17,7 +16,7 @@ const destPath = 'dist';
 
 const paths = {
     html: {
-        src: [`${srcPath}/pages/**/*.html`],
+        src: [`${srcPath}/**/*.html`],
         dest: destPath
     },
     images: {
@@ -40,14 +39,7 @@ function cleaning() {
 }
 
 function html() {
-    panini.refresh();
     return src(paths.html.src)
-        .pipe(panini({
-            root: `${srcPath}/pages`,
-            layouts: `${srcPath}/layouts/`,
-            partials: `${srcPath}/partials/`,
-            data: `${srcPath}/data/`
-        }))
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(dest(paths.html.dest))
         .pipe(browserSync.stream());
